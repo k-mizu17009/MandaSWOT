@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+
+# venv
+.venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+
+# App data（ローカル保存をコミットしたくない場合）
+data/*.json
+
+# Media (大容量ファイルの除外)
+*.mp4
+*.mov
+*.avi
+notes_concept/*.mp4
