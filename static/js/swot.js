@@ -141,6 +141,21 @@
         items.sort((a,b) => sort === 'asc' ? a.sum - b.sum : b.sum - a.sum);
       }
       listEl.innerHTML = '';
+      // Header row
+      const header = document.createElement('div');
+      header.className = 'priority-item header';
+      const headerLeft = document.createElement('div');
+      headerLeft.className = 'left';
+      headerLeft.textContent = '戦略';
+      const headerRight = document.createElement('div');
+      headerRight.className = 'scores';
+      const mkLabel = (txt) => { const s = document.createElement('span'); s.className = 'label'; s.textContent = txt; return s; };
+      headerRight.appendChild(mkLabel('重要性'));
+      headerRight.appendChild(mkLabel('緊急性'));
+      headerRight.appendChild(mkLabel('解決可能性'));
+      const sumLbl = document.createElement('div'); sumLbl.className = 'sum'; sumLbl.textContent = '合計点(優先順位)'; headerRight.appendChild(sumLbl);
+      header.appendChild(headerLeft); header.appendChild(headerRight);
+      listEl.appendChild(header);
       items.forEach((p) => {
         const row = document.createElement('div');
         row.className = 'priority-item';
