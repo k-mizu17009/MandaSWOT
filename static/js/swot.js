@@ -36,7 +36,7 @@
 
     const bullets = items.map((p,i)=>{
       const note = p.comment ? `｜備考:${p.comment}` : '';
-      return `- ${p.title} (効果:${p.impact}/緊急:${p.urgency}/実現:${p.feasibility}${note})`;
+      return `- ${p.title} (重要性:${p.impact}/緊急性:${p.urgency}/解決可能性:${p.feasibility}${note})`;
     }).join('\n');
 
     return `${instruction}\n\n優先度リスト:\n${bullets}`;
@@ -170,10 +170,10 @@
           wrap.appendChild(input);
           return wrap;
         };
-        right.appendChild(makeNum('効果', 'impact'));
-        right.appendChild(makeNum('緊急度', 'urgency'));
-        right.appendChild(makeNum('実現性', 'feasibility'));
-        const sum = document.createElement('div'); sum.className = 'sum'; sum.textContent = String(p.sum || 0); right.appendChild(sum);
+        right.appendChild(makeNum('重要性', 'impact'));
+        right.appendChild(makeNum('緊急性', 'urgency'));
+        right.appendChild(makeNum('解決可能性', 'feasibility'));
+        const sum = document.createElement('div'); sum.className = 'sum'; sum.textContent = String(p.sum || 0); sum.title = '合計点(優先順位)'; right.appendChild(sum);
         const comment = document.createElement('textarea');
         comment.className = 'comment';
         comment.placeholder = '備考';
@@ -243,7 +243,7 @@
       addPriority.addEventListener('click', () => {
         pushHistory();
         state.swot.priorities = state.swot.priorities || [];
-        state.swot.priorities.push({ title: '', impact: 3, urgency: 3, feasibility: 3, comment: '', locked: false });
+        state.swot.priorities.push({ title: '', impact: 5, urgency: 5, feasibility: 5, comment: '', locked: false });
         render();
         save();
       });
@@ -263,7 +263,7 @@
         state.swot.priorities = state.swot.priorities || [];
         lines.forEach(txt => {
           if (!state.swot.priorities.some(p => (p.title || '').trim() === txt)) {
-            state.swot.priorities.push({ title: txt, impact: 3, urgency: 3, feasibility: 3, comment: '', locked: true });
+            state.swot.priorities.push({ title: txt, impact: 5, urgency: 5, feasibility: 5, comment: '', locked: true });
           }
         });
         render();
