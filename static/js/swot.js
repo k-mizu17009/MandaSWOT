@@ -13,7 +13,8 @@
   }
 
   function save() {
-    fetch('/api/swot', {
+    const base = (window.APP_BASE || '');
+    fetch(base + '/api/swot', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(state.swot)
@@ -99,7 +100,8 @@
     }
 
     // Strategies
-    fetch('/api/swot/strategies').then(r => r.json()).then(strats => {
+    const base = (window.APP_BASE || '');
+    fetch(base + '/api/swot/strategies').then(r => r.json()).then(strats => {
       const wrap = document.getElementById('strategies');
       wrap.innerHTML = '';
       const activeTab = document.querySelector('.tabs button.active')?.dataset.tab || 'SO';
@@ -373,7 +375,8 @@
   }
 
   function init() {
-    fetch('/api/swot').then(r => r.json()).then(data => {
+    const base = (window.APP_BASE || '');
+    fetch(base + '/api/swot').then(r => r.json()).then(data => {
       // migrate old crossNotes string format to arrays if needed
       if (data.crossNotes && typeof data.crossNotes.SO === 'string') {
         data.crossNotes = {

@@ -8,7 +8,8 @@
 
   let saveTimer = null;
   function saveNow() {
-    fetch('/api/mandala', {
+    const base = (window.APP_BASE || '');
+    fetch(base + '/api/mandala', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(state.data)
@@ -316,7 +317,8 @@
   }
 
   function init() {
-    fetch('/api/mandala').then(r => r.json()).then(data => {
+    const base = (window.APP_BASE || '');
+    fetch(base + '/api/mandala').then(r => r.json()).then(data => {
       state.data = data;
       render();
     });
