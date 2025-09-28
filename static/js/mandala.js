@@ -184,26 +184,27 @@
             // センターにも任意でステージを持てるように
             stageRefObj = root; stageProp = 'centerStage';
           } else {
-            // 中央エリアの周囲8マスに章タイトルを表示
+            // 中央エリアの周囲8マスに章タイトルを表示（1,2,3 / 4,CENTER,5 / 6,7,8）
             const centerPositions = [
-              [3,3], [3,4], [3,5], // 上段: ①②③
-              [4,5],        [5,5], // 右段: ④⑤
-              [5,4], [5,3], [4,3]  // 下段+左段: ⑥⑦⑧
+              [3,3], [3,4], [3,5], // 上段: 1,2,3
+              [4,3],        [4,5], // 中段: 左=4, 右=5
+              [5,3], [5,4], [5,5]  // 下段: 6,7,8
             ];
             const chapterTitles = [
               '明確なKPI設定',
               '業務プロセス最適化', 
               '優先順位とリソース配分',
               '成果の見える化と共有',
-              '個別成長プラン策定',
-              'フィードバック文化の醸成',
+              '自律性と責任感の育成',
               'スキル習得支援',
-              '自律性と責任感の育成'
+              'フィードバック文化の醸成',
+              '個別成長プラン策定'
             ];
             const posIdx = centerPositions.findIndex(([r,c]) => r === row && c === col);
             if (posIdx !== -1) {
               const chapterCell = ensureObjectInArray(root.cells, posIdx);
               input.value = (typeof chapterCell === 'string') ? chapterCell : (chapterCell?.text || '');
+              // センター部分9マスは分類色を付けない（常にテーマ色）
               div.className += ' theme';
               input.readOnly = (document.getElementById('toggle-81-edit')?.dataset.mode !== 'ON');
               stageRefObj = chapterCell; stageProp = 'stage';
