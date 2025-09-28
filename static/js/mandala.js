@@ -108,6 +108,14 @@
     wrap.classList.add('view-81');
     
     const root = state.data.nodes['root'];
+    const editBtn = document.getElementById('toggle-81-edit');
+    if (editBtn) {
+      editBtn.style.display = '';
+      if (!editBtn.dataset.mode) {
+        editBtn.dataset.mode = 'OFF';
+        editBtn.textContent = '編集モード: OFF';
+      }
+    }
     
     // 9x9=81マスの曼荼羅構造
     const chapterMap = [
@@ -172,7 +180,7 @@
           if (row === 4 && col === 4) {
             div.className += ' theme';
             input.value = root.title || '';
-            input.oninput = () => { root.title = input.value; save(); };
+            input.readOnly = (document.getElementById('toggle-81-edit')?.dataset.mode !== 'ON');
             // センターにも任意でステージを持てるように
             stageRefObj = root; stageProp = 'centerStage';
           } else {
@@ -197,11 +205,7 @@
               const chapterCell = ensureObjectInArray(root.cells, posIdx);
               input.value = (typeof chapterCell === 'string') ? chapterCell : (chapterCell?.text || '');
               div.className += ' theme';
-              input.oninput = () => {
-                const obj = ensureObjectInArray(root.cells, posIdx);
-                obj.text = input.value;
-                save();
-              };
+              input.readOnly = (document.getElementById('toggle-81-edit')?.dataset.mode !== 'ON');
               stageRefObj = chapterCell; stageProp = 'stage';
             } else {
               input.value = '';
@@ -218,11 +222,7 @@
             const cell = ensureObjectInArray(root.cells, chapterIdx);
             input.value = (typeof cell === 'string') ? cell : (cell?.text || '');
             div.className += ' theme chapter-center ' + (chapterIdx <= 3 ? 'cat-outcome' : 'cat-growth');
-            input.oninput = () => {
-              const obj = ensureObjectInArray(root.cells, chapterIdx);
-              obj.text = input.value;
-              save();
-            };
+            input.readOnly = (document.getElementById('toggle-81-edit')?.dataset.mode !== 'ON');
             stageRefObj = cell; stageProp = 'stage';
           } else {
             // 章の周囲8マス
@@ -241,11 +241,7 @@
             if (childIdx !== -1 && child.cells[childIdx]) {
               const cc = ensureObjectInArray(child.cells, childIdx);
               input.value = (typeof cc === 'string') ? cc : (cc?.text || '');
-              input.oninput = () => {
-                const obj = ensureObjectInArray(child.cells, childIdx);
-                obj.text = input.value;
-                save();
-              };
+              input.readOnly = (document.getElementById('toggle-81-edit')?.dataset.mode !== 'ON');
               div.className += ' ' + (chapterIdx <= 3 ? 'cat-outcome' : 'cat-growth');
               stageRefObj = cc; stageProp = 'stage';
             }
@@ -404,6 +400,20 @@
     const overlay = document.getElementById('mandala-overlay');
     const closeBtn = document.getElementById('close-overlay');
     if (closeBtn) closeBtn.onclick = () => { overlay?.classList.remove('active'); };
+
+    const editBtn = document.getElementById('toggle-81-edit');
+    if (editBtn) {
+      editBtn.addEventListener('click', () => {
+        const cur = editBtn.dataset.mode === 'ON' ? 'OFF' : 'ON';
+        editBtn.dataset.mode = cur;
+        editBtn.textContent = `編集モード: ${cur}`;
+        const wrap = document.getElementById('mandala-app');
+        if (wrap.classList.contains('view-81')) {
+          // Re-render 81 view to apply readOnly toggle
+          render81();
+        }
+      });
+    }
   }
 
   function buildMarkdown(data) {
