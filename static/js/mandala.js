@@ -24,6 +24,7 @@
     const wrap = document.getElementById('mandala-app');
     wrap.innerHTML = '';
     const node = state.data.nodes[state.currentId];
+    const isEditing = (document.getElementById('toggle-edit')?.dataset.mode === 'ON');
     const cells = [0,1,2,3,'center',4,5,6,7];
     cells.forEach(pos => {
       const div = document.createElement('div');
@@ -40,7 +41,10 @@
         input.value = node.title || '';
         input.rows = 1; input.style.height = 'auto';
         const autoresize = () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 300) + 'px'; };
-        input.oninput = () => { node.title = input.value; autoresize(); save(); };
+        input.readOnly = !isEditing;
+        if (isEditing) {
+          input.oninput = () => { node.title = input.value; autoresize(); save(); };
+        }
         setTimeout(autoresize, 0);
         div.appendChild(input);
       } else {
@@ -51,15 +55,18 @@
         input.value = textValue;
         input.rows = 1; input.style.height = 'auto';
         const autoresize = () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 220) + 'px'; };
-        input.oninput = () => {
-          const current = node.cells[idx];
-          if (typeof current === 'string') {
-            node.cells[idx] = { text: input.value };
-          } else {
-            current.text = input.value;
-          }
-          autoresize(); save();
-        };
+        input.readOnly = !isEditing;
+        if (isEditing) {
+          input.oninput = () => {
+            const current = node.cells[idx];
+            if (typeof current === 'string') {
+              node.cells[idx] = { text: input.value };
+            } else {
+              current.text = input.value;
+            }
+            autoresize(); save();
+          };
+        }
         setTimeout(autoresize, 0);
         input.onchange = () => ensureChild(idx);
         div.appendChild(input);
@@ -108,14 +115,7 @@
     wrap.classList.add('view-81');
     
     const root = state.data.nodes['root'];
-    const editBtn = document.getElementById('toggle-81-edit');
-    if (editBtn) {
-      editBtn.style.display = '';
-      if (!editBtn.dataset.mode) {
-        editBtn.dataset.mode = 'OFF';
-        editBtn.textContent = '編集モード: OFF';
-      }
-    }
+    const isEditing = (document.getElementById('toggle-edit')?.dataset.mode === 'ON');
     
     // 9x9=81マスの曼荼羅構造
     const chapterMap = [
@@ -180,7 +180,8 @@
           if (row === 4 && col === 4) {
             div.className += ' theme';
             input.value = root.title || '';
-            input.readOnly = (document.getElementById('toggle-81-edit')?.dataset.mode !== 'ON');
+            input.readOnly = !isEditing;
+            if (isEditing) { input.oninput = () => { root.title = input.value; save(); }; }
             // センターにも任意でステージを持てるように
             stageRefObj = root; stageProp = 'centerStage';
           } else {
@@ -206,7 +207,8 @@
               input.value = (typeof chapterCell === 'string') ? chapterCell : (chapterCell?.text || '');
               // センター部分9マスは分類色を付けない（常にテーマ色）
               div.className += ' theme';
-              input.readOnly = (document.getElementById('toggle-81-edit')?.dataset.mode !== 'ON');
+              input.readOnly = !isEditing;
+              if (isEditing) { input.oninput = () => { const obj = ensureObjectInArray(root.cells, posIdx); obj.text = input.value; save(); }; }
               stageRefObj = chapterCell; stageProp = 'stage';
             } else {
               input.value = '';
@@ -223,7 +225,8 @@
             const cell = ensureObjectInArray(root.cells, chapterIdx);
             input.value = (typeof cell === 'string') ? cell : (cell?.text || '');
             div.className += ' theme chapter-center ' + (chapterIdx <= 3 ? 'cat-outcome' : 'cat-growth');
-            input.readOnly = (document.getElementById('toggle-81-edit')?.dataset.mode !== 'ON');
+            input.readOnly = !isEditing;
+            if (isEditing) { input.oninput = () => { const obj = ensureObjectInArray(root.cells, chapterIdx); obj.text = input.value; save(); }; }
             stageRefObj = cell; stageProp = 'stage';
           } else {
             // 章の周囲8マス
@@ -242,7 +245,8 @@
             if (childIdx !== -1 && child.cells[childIdx]) {
               const cc = ensureObjectInArray(child.cells, childIdx);
               input.value = (typeof cc === 'string') ? cc : (cc?.text || '');
-              input.readOnly = (document.getElementById('toggle-81-edit')?.dataset.mode !== 'ON');
+              input.readOnly = !isEditing;
+              if (isEditing) { input.oninput = () => { const obj = ensureObjectInArray(child.cells, childIdx); obj.text = input.value; save(); }; }
               div.className += ' ' + (chapterIdx <= 3 ? 'cat-outcome' : 'cat-growth');
               stageRefObj = cc; stageProp = 'stage';
             }
@@ -402,16 +406,22 @@
     const closeBtn = document.getElementById('close-overlay');
     if (closeBtn) closeBtn.onclick = () => { overlay?.classList.remove('active'); };
 
-    const editBtn = document.getElementById('toggle-81-edit');
+    const editBtn = document.getElementById('toggle-edit');
     if (editBtn) {
+      // 初期化（datasetが未設定ならOFFに）
+      if (!editBtn.dataset.mode) {
+        editBtn.dataset.mode = 'OFF';
+        editBtn.textContent = '編集モード: OFF';
+      }
       editBtn.addEventListener('click', () => {
         const cur = editBtn.dataset.mode === 'ON' ? 'OFF' : 'ON';
         editBtn.dataset.mode = cur;
         editBtn.textContent = `編集モード: ${cur}`;
         const wrap = document.getElementById('mandala-app');
         if (wrap.classList.contains('view-81')) {
-          // Re-render 81 view to apply readOnly toggle
           render81();
+        } else {
+          render();
         }
       });
     }
