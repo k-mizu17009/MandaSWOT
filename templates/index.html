@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Home - MandaSWOT ― 思考を整理する意思決定ダッシュボード{% endblock %}
+{% block content %}
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="kicker">MandaSWOT</div>
+      <h1>思考を整え、意思決定を加速する</h1>
+      <p>SWOTと曼荼羅で、発想を構造化しながら前に進む。<br/>MandaSWOTで今日の一歩を決めよう。</p>
+      <div class="cta">
+        <a class="btn primary" href="/swot">SWOTをはじめる</a>
+        <a class="btn primary" href="/mandala">曼荼羅をひらく</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <h3>⚡ 直感操作</h3>
+      <p>ドラッグ＆ドロップ、ダブルクリック編集。迷わず使えるUI。</p>
+    </div>
+    <div class="feature-card">
+      <h3>💾 自動保存</h3>
+      <p>入力と同時に保存。思考の流れを止めません。</p>
+    </div>
+    <div class="feature-card">
+      <h3>🧩 戦略の糸口</h3>
+      <p>SWOTからSO/WO/ST/WTを自動生成。ディスカッションの起点に。</p>
+    </div>
+  </section>
+
+  <section class="quick-links">
+    <a class="quick-card" href="/swot">
+      <div class="qc-head">SWOT分析</div>
+      <p>強み・弱み・機会・脅威を整理し、打ち手を導出。</p>
+    </a>
+    <a class="quick-card" href="/mandala">
+      <div class="qc-head">曼荼羅チャート</div>
+      <p>9/81マスで発想を拡張。テーマから着実に分解。</p>
+    </a>
+  </section>
+{% endblock %}
+
+

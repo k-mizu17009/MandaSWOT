@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}ダッシュボード - MandaSWOT ― 思考を整理する意思決定ダッシュボード{% endblock %}
+{% block content %}
+  <section>
+    <h1>週次ダッシュボード</h1>
+    <div class="progress">
+      <div class="bar" style="width: {{ progress }}%"></div>
+    </div>
+    <p>完了: {{ done }} / 合計: {{ total }} （{{ progress }}%）</p>
+  </section>
+{% endblock %}
+
+

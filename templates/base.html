@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}MandaSWOT ― 思考を整理する意思決定ダッシュボード{% endblock %}</title>
+  <meta name="description" content="SWOTと曼荼羅で思考を整理し、意思決定を加速するWebアプリ『MandaSWOT』。今日の一歩を決めよう。" />
+  <meta name="theme-color" content="#7c3aed" />
+  <meta name="robots" content="index,follow" />
+  <meta property="og:site_name" content="MandaSWOT" />
+  <meta property="og:title" content="MandaSWOT ― 思考を整理する意思決定ダッシュボード" />
+  <meta property="og:description" content="SWOTと曼荼羅で発想を構造化し、前に進む。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ request.url_root }}" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20250921200000" />
+</head>
+<body>
+  <header class="app-header">
+    <nav class="nav">
+      <a href="/" class="brand">MandaSWOT ― 思考を整理する意思決定ダッシュボード</a>
+      <a href="/swot">SWOT</a>
+      <a href="/mandala">曼荼羅</a>
+      <a href="/dashboard">ダッシュボード</a>
+    </nav>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
+
+

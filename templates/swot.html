@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}SWOT - MandaSWOT ― 思考を整理する意思決定ダッシュボード{% endblock %}
+{% block content %}
+  <section>
+    <h1>SWOT分析</h1>
+    <div id="swot-app" class="swot-grid">
+      <div class="quadrant" data-key="strengths">
+        <h2>強み</h2>
+        <div class="cards" id="q-strengths"></div>
+        <button class="add-card" data-target="strengths">＋ 追加</button>
+      </div>
+      <div class="quadrant" data-key="weaknesses">
+        <h2>弱み</h2>
+        <div class="cards" id="q-weaknesses"></div>
+        <button class="add-card" data-target="weaknesses">＋ 追加</button>
+      </div>
+      <div class="quadrant" data-key="opportunities">
+        <h2>機会</h2>
+        <div class="cards" id="q-opportunities"></div>
+        <button class="add-card" data-target="opportunities">＋ 追加</button>
+      </div>
+      <div class="quadrant" data-key="threats">
+        <h2>脅威</h2>
+        <div class="cards" id="q-threats"></div>
+        <button class="add-card" data-target="threats">＋ 追加</button>
+      </div>
+    </div>
+
+    <h2 class="mt-24">クロス分析</h2>
+    <div class="tabs">
+      <button data-tab="SO">SO戦略</button>
+      <button data-tab="ST">ST戦略</button>
+      <button data-tab="WO">WO戦略</button>
+      <button data-tab="WT">WT戦略</button>
+    </div>
+    <div id="strategies" class="strategies"></div>
+
+    <h2 class="mt-24">クロスSWOT記入欄</h2>
+    <div class="cross-notes">
+      <div class="note">
+        <div class="note-head">
+          <h3>SO戦略（強み×機会）</h3>
+          <button class="add-card" data-note-add="SO">＋ 行を追加</button>
+        </div>
+        <div id="list-so" class="note-list"></div>
+      </div>
+      <div class="note">
+        <div class="note-head">
+          <h3>WO戦略（弱み×機会）</h3>
+          <button class="add-card" data-note-add="WO">＋ 行を追加</button>
+        </div>
+        <div id="list-wo" class="note-list"></div>
+      </div>
+      <div class="note">
+        <div class="note-head">
+          <h3>ST戦略（強み×脅威）</h3>
+          <button class="add-card" data-note-add="ST">＋ 行を追加</button>
+        </div>
+        <div id="list-st" class="note-list"></div>
+      </div>
+      <div class="note">
+        <div class="note-head">
+          <h3>WT戦略（弱み×脅威）</h3>
+          <button class="add-card" data-note-add="WT">＋ 行を追加</button>
+        </div>
+        <div id="list-wt" class="note-list"></div>
+      </div>
+    </div>
+
+    <h2 class="mt-24">優先度付け</h2>
+    <div class="prioritize">
+      <div class="prioritize-controls">
+        <button id="add-priority" class="add-card">＋ 戦略を追加</button>
+        <button id="sync-priority" class="add-card" style="background:linear-gradient(135deg, var(--accent-2), var(--accent));">クロスSWOT記入欄から取り込み</button>
+        <label>並び替え:
+          <select id="sort-priority">
+            <option value="none" selected>指定しない</option>
+            <option value="desc">合計スコアの高い順</option>
+            <option value="asc">合計スコアの低い順</option>
+          </select>
+        </label>
+      </div>
+      <div id="priority-list" class="priority-list"></div>
+    </div>
+
+    <h2 class="mt-24">優先度リストの出力</h2>
+    <div class="export-block">
+      <div class="export-actions">
+        <button id="copy-text" class="add-card">テキストをコピー</button>
+        <button id="copy-json" class="add-card">JSONをコピー</button>
+      </div>
+      <pre id="export-preview" class="export-preview"></pre>
+    </div>
+
+    <h2 class="mt-24">90日アクションプラン</h2>
+    <div class="plan-90d-wrap">
+      <div class="plan-toolbar">
+        <label class="mr-8">編集モード:
+          <select id="plan-mode">
+            <option value="md" selected>Markdown</option>
+            <option value="txt">プレーンテキスト</option>
+          </select>
+        </label>
+        <button type="button" id="plan-insert-template" class="add-card">テンプレ挿入</button>
+        <button type="button" data-md-insert="- " class="add-card">・箇条書き</button>
+        <button type="button" data-md-insert="- [ ] " class="add-card">□ チェック</button>
+        <button type="button" data-md-surround="**" class="add-card">太字</button>
+        <button type="button" id="copy-plan-preview" class="add-card" style="margin-left:auto;">プレビューをコピー</button>
+      </div>
+      <textarea id="plan-90d" class="plan-90d" placeholder="90日で実行するアクションをマークダウンで..."></textarea>
+      <div id="plan-90d-preview" class="md-preview"></div>
+    </div>
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="{{ url_for('static', filename='js/swot.js') }}"></script>
+{% endblock %}
+
+

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}曼荼羅 - MandaSWOT ― 思考を整理する意思決定ダッシュボード{% endblock %}
+{% block content %}
+  <section>
+    <h1>曼荼羅チャート</h1>
+    <div class="toolbar justify-center mb-12">
+      <button id="toggle-81-view" class="add-card">81マス表示切替</button>
+      <button id="export-md" class="add-card">Markdown出力をコピー</button>
+    </div>
+    <div id="mandala-app" class="mandala"></div>
+    <pre id="md-preview" class="export-preview mt-8"></pre>
+    <div id="mandala-overlay" class="mandala-overlay">
+      <div class="mandala-modal">
+        <button id="close-overlay" class="add-card float-right">閉じる</button>
+        <div id="mandala-expanded" class="mandala mt-40"></div>
+      </div>
+    </div>
+  </section>
+  <script src="{{ url_for('static', filename='js/mandala.js') }}"></script>
+{% endblock %}
+
+
