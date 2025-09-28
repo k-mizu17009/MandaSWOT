@@ -78,6 +78,12 @@ def create_app() -> Flask:
         write_json("data/mandala.json", data)
         return jsonify({"ok": True})
 
+    # Health endpoints (for uptime checks)
+    @app.route("/healthz")
+    @app.route("/health")
+    def healthz():
+        return ("ok", 200, {"Content-Type": "text/plain; charset=utf-8"})
+
     return app
 
 
