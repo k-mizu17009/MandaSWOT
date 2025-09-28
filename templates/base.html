@@ -22,10 +22,10 @@
 <body>
   <header class="app-header">
     <nav class="nav">
-      <a href="{{ request.script_root }}{{ url_for('index') }}" class="brand">MandaSWOT ― 思考を整理する意思決定ダッシュボード</a>
-      <a href="{{ request.script_root }}{{ url_for('swot_page') }}">SWOT</a>
-      <a href="{{ request.script_root }}{{ url_for('mandala_page') }}">曼荼羅</a>
-      <a href="{{ request.script_root }}{{ url_for('dashboard_page') }}">ダッシュボード</a>
+      <a href="{{ url_for('index') }}" class="brand">MandaSWOT ― 思考を整理する意思決定ダッシュボード</a>
+      <a href="{{ url_for('swot_page') }}">SWOT</a>
+      <a href="{{ url_for('mandala_page') }}">曼荼羅</a>
+      <a href="{{ url_for('dashboard_page') }}">ダッシュボード</a>
     </nav>
   </header>
   <main class="container">
