@@ -179,9 +179,19 @@
           const wrap = document.createElement('label');
           wrap.textContent = label+' ';
           const input = document.createElement('input');
-          input.type = 'number'; input.min = '1'; input.max = '5';
-          input.value = String(p[key] ?? 3);
-          input.oninput = () => { state.swot.priorities[p._i][key] = Number(input.value || 0); render(); save(); };
+          const maxVal = Math.max(items.length, 1);
+          input.type = 'number'; input.min = '1'; input.max = String(maxVal);
+          const current = Number(p[key] ?? maxVal);
+          const clamped = Math.min(Math.max(current, 1), maxVal);
+          if (current !== clamped) { state.swot.priorities[p._i][key] = clamped; }
+          input.value = String(clamped);
+          input.oninput = () => {
+            const raw = Number(input.value || 0);
+            const val = Math.min(Math.max(raw, 1), maxVal);
+            state.swot.priorities[p._i][key] = val;
+            render();
+            save();
+          };
           wrap.appendChild(input);
           return wrap;
         };
@@ -258,7 +268,8 @@
       addPriority.addEventListener('click', () => {
         pushHistory();
         state.swot.priorities = state.swot.priorities || [];
-        state.swot.priorities.push({ title: '', impact: 5, urgency: 5, feasibility: 5, comment: '', locked: false });
+        const n = (state.swot.priorities.length || 0) + 1;
+        state.swot.priorities.push({ title: '', impact: n, urgency: n, feasibility: n, comment: '', locked: false });
         render();
         save();
       });
@@ -278,7 +289,8 @@
         state.swot.priorities = state.swot.priorities || [];
         lines.forEach(txt => {
           if (!state.swot.priorities.some(p => (p.title || '').trim() === txt)) {
-            state.swot.priorities.push({ title: txt, impact: 5, urgency: 5, feasibility: 5, comment: '', locked: true });
+            const n = (state.swot.priorities.length || 0) + 1;
+            state.swot.priorities.push({ title: txt, impact: n, urgency: n, feasibility: n, comment: '', locked: true });
           }
         });
         render();
