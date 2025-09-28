@@ -16,6 +16,8 @@
   --input-ink: #0f172a;
   --input-border: #d7deea;
   --input-focus: #c4b5fd;
+  /* Readability layer for mandala inputs (light) */
+  --cell-text-bg: rgba(255, 255, 255, 0.72);
 }
 
 body {
@@ -23,7 +25,8 @@ body {
   background:
     radial-gradient(1200px 600px at 10% -10%, rgba(124,58,237,0.12), transparent 60%),
     radial-gradient(1000px 500px at 100% 0%, rgba(236,72,153,0.10), transparent 60%),
-    linear-gradient(180deg, #f9fbff, #f4f7fc 40%, #eef3fb);
+    /* pastel violet → indigo → sky */
+    linear-gradient(180deg, #f4ecff, #eef2ff 40%, #e6f4ff);
   color: var(--ink);
   font-size: 16px;
   line-height: 1.7;
@@ -107,6 +110,8 @@ body {
     --input-ink: #e5e7eb;
     --input-border: #233049;
     --input-focus: #a78bfa;
+    /* Readability layer for mandala inputs (dark) */
+    --cell-text-bg: rgba(15, 23, 42, 0.55);
   }
   body { background: linear-gradient(180deg, #0b1220, #0d1528 40%, #0b1324); color: var(--ink); }
   .nav a { color: #cbd5e1; }
@@ -223,30 +228,78 @@ body {
   align-items: center; 
   justify-content: center; 
   text-align: center; 
-  box-shadow: 0 10px 28px rgba(2, 6, 23, 0.08);
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.10);
   transition: all .3s ease; 
   position: relative; 
   width: 100%; 
   height: 100%; 
   transform-style: preserve-3d;
 }
+.mandala .cell::after {
+  /* Modern gradient ring (border) */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 1px; /* ring thickness */
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity .25s ease;
+  pointer-events: none;
+}
+.mandala .cell:hover::after, .mandala .cell:focus-within::after { opacity: .55; }
 .mandala .cell.theme { 
   background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.12));
   border-color: rgba(139, 92, 246, 0.25);
 }
+.mandala .cell.theme::after { opacity: .22; }
+
+/* Chapter center emphasis in 81-mode */
+.mandala.view-81 .chapter-center {
+  background: linear-gradient(135deg, rgba(124,58,237,0.20), rgba(236,72,153,0.16));
+  border-color: rgba(124,58,237,0.45);
+  box-shadow: 0 14px 36px rgba(124,58,237,0.28);
+}
+.mandala.view-81 .chapter-center::after { opacity: .6; }
+.mandala.view-81 .chapter-center textarea { font-weight: 800; letter-spacing: .3px; }
+
+/* Category colors */
+.mandala .cell.cat-outcome { /* 成果(青) */
+  background: linear-gradient(180deg, rgba(59,130,246,0.14), rgba(59,130,246,0.08));
+  border-color: rgba(59,130,246,0.28);
+}
+.mandala .cell.cat-growth { /* 成長(緑) */
+  background: linear-gradient(180deg, rgba(34,197,94,0.14), rgba(34,197,94,0.08));
+  border-color: rgba(34,197,94,0.28);
+}
+.mandala .cell.cat-outcome::after { background: linear-gradient(135deg, #60a5fa, #3b82f6); opacity: .25; }
+.mandala .cell.cat-growth::after  { background: linear-gradient(135deg, #34d399, #22c55e); opacity: .25; }
 .mandala .cell.theme textarea { font-weight: 700; color: var(--input-ink); }
 .mandala .cell:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(2, 6, 23, 0.15); }
 .mandala .cell:focus-within { transform: translateY(-6px); box-shadow: 0 0 0 2px var(--input-focus), 0 18px 44px rgba(2, 6, 23, 0.22); border-color: var(--input-focus); }
-.mandala .cell input { background: var(--input-bg); color: var(--input-ink); border: 1px solid var(--input-border); border-radius: 12px; text-align: center; font-size: 16px; width: 100%; height: 100%; padding: 10px 12px; box-shadow: 0 1px 2px rgba(2,6,23,0.06) inset; box-sizing: border-box; }
-.mandala .cell textarea { background: var(--input-bg); color: var(--input-ink); border: 1px solid var(--input-border); border-radius: 12px; text-align: center; font-size: 16px; resize: none; width: 100%; height: 100%; line-height: 1.5; padding: 10px 12px; box-shadow: 0 1px 2px rgba(2,6,23,0.06) inset; box-sizing: border-box; }
-.mandala .cell input:focus, .mandala .cell textarea:focus { outline: 2px solid var(--input-focus); outline-offset: 2px; border-color: var(--input-focus); }
+.mandala .cell input { background: var(--cell-text-bg); color: var(--input-ink); border: none; border-radius: 12px; text-align: center; font-size: 16px; width: 100%; height: 100%; padding: 10px 12px; box-sizing: border-box; font-weight: 600; letter-spacing: .2px; }
+.mandala .cell textarea { background: var(--cell-text-bg); color: var(--input-ink); border: none; border-radius: 12px; text-align: center; font-size: 16px; resize: none; width: 100%; height: 100%; line-height: 1.6; padding: 10px 12px; box-sizing: border-box; font-weight: 600; letter-spacing: .2px; }
+.mandala .cell input:focus, .mandala .cell textarea:focus { outline: none; box-shadow: inset 0 0 0 2px var(--input-focus); }
+
+/* open button */
+.mandala .cell .open-btn {
+  position: absolute; bottom: 10px; right: 10px; 
+  width: 28px; height: 28px; border-radius: 999px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 6px 14px rgba(124,58,237,0.35);
+  color: #fff; display: inline-flex; align-items: center; justify-content: center;
+}
+.mandala .cell .open-btn::before { content: "↗"; font-weight: 800; }
 .mandala.view-81 .cell textarea { font-size: 12px; display: block; padding: 8px; }
 
 /* 81マス段階色（0→1→2→3） */
 .mandala.view-81 .cell.stage-1 { background: linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.08)); border-color: rgba(59,130,246,0.28); }
 .mandala.view-81 .cell.stage-2 { background: linear-gradient(180deg, rgba(37,99,235,0.28), rgba(29,78,216,0.22)); border-color: rgba(37,99,235,0.45); }
 .mandala.view-81 .cell.stage-3 { background: linear-gradient(180deg, rgba(180,141,15,0.40), rgba(180,141,15,0.30)); border-color: rgba(180,141,15,0.55); }
-.mandala.view-81 .stage-dot { position: absolute; top: 8px; right: 8px; width: 14px; height: 14px; border-radius: 999px; border: 1px solid rgba(0,0,0,0.12); background: rgba(255,255,255,0.95); cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.mandala.view-81 .stage-dot { position: absolute; top: 10px; right: 10px; width: 18px; height: 18px; border-radius: 999px; border: none; background: radial-gradient( circle at 30% 30%, #fff, rgba(255,255,255,0.6) ); cursor: pointer; box-shadow: 0 2px 8px rgba(2,6,23,0.18); }
 .mandala.view-81 .cell.stage-1 .stage-dot { background: rgba(59,130,246,0.30); }
 .mandala.view-81 .cell.stage-2 .stage-dot { background: rgba(37,99,235,0.60); }
 .mandala.view-81 .cell.stage-3 .stage-dot { background: rgba(180,141,15,0.75); }

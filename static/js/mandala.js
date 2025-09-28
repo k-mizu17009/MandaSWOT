@@ -27,7 +27,14 @@
     const cells = [0,1,2,3,'center',4,5,6,7];
     cells.forEach(pos => {
       const div = document.createElement('div');
-      div.className = 'cell' + (pos === 'center' ? ' theme' : '');
+      let klass = 'cell';
+      if (pos === 'center') {
+        klass += ' theme';
+      } else if (typeof pos === 'number') {
+        // 0-3: 成果(青), 4-7: 成長(緑)
+        klass += (pos <= 3 ? ' cat-outcome' : ' cat-growth');
+      }
+      div.className = klass;
       if (pos === 'center') {
         const input = document.createElement('textarea');
         input.value = node.title || '';
@@ -55,10 +62,19 @@
         };
         setTimeout(autoresize, 0);
         input.onchange = () => ensureChild(idx);
-        input.ondblclick = () => { ensureChild(idx); navigateToChild(idx); };
         div.appendChild(input);
 
-        // ステータス機能を削除
+        // 1クリックで拡大表示ボタン
+        const openBtn = document.createElement('button');
+        openBtn.type = 'button';
+        openBtn.className = 'open-btn';
+        openBtn.title = 'この9マスを開く';
+        openBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          ensureChild(idx);
+          navigateToChild(idx);
+        });
+        div.appendChild(openBtn);
 
         div.draggable = true;
         div.addEventListener('dragstart', e => {
@@ -201,7 +217,7 @@
             // 章の中央マス（章タイトル）
             const cell = ensureObjectInArray(root.cells, chapterIdx);
             input.value = (typeof cell === 'string') ? cell : (cell?.text || '');
-            div.className += ' theme';
+            div.className += ' theme chapter-center ' + (chapterIdx <= 3 ? 'cat-outcome' : 'cat-growth');
             input.oninput = () => {
               const obj = ensureObjectInArray(root.cells, chapterIdx);
               obj.text = input.value;
@@ -230,6 +246,7 @@
                 obj.text = input.value;
                 save();
               };
+              div.className += ' ' + (chapterIdx <= 3 ? 'cat-outcome' : 'cat-growth');
               stageRefObj = cc; stageProp = 'stage';
             }
           }
@@ -261,25 +278,58 @@
     const expanded = document.getElementById('mandala-expanded');
     if (overlay && expanded) {
       overlay.classList.add('active');
-      const originalId = state.currentId;
-      state.currentId = key;
-      const originalWrap = document.getElementById('mandala-app');
-      const savedWrap = originalWrap.cloneNode(false);
-      const prev = originalWrap.parentNode;
-      const backup = document.getElementById('mandala-app');
-      backup.id = 'mandala-expanded';
-      render();
-      document.getElementById('mandala-expanded').id = 'mandala-app';
-      expanded.innerHTML = document.getElementById('mandala-app').innerHTML;
-      document.getElementById('mandala-app').innerHTML = '';
-      prev.replaceChild(savedWrap, document.getElementById('mandala-app'));
-      savedWrap.id = 'mandala-app';
-      state.currentId = originalId;
-      render();
+      // Render the selected 9-cells directly into the modal
+      const idxNum = Number(String(idx));
+      renderNodeInto(expanded, key, idxNum);
     } else {
       state.currentId = key;
       render();
     }
+  }
+
+  function renderNodeInto(container, nodeId, chapterIdx) {
+    container.innerHTML = '';
+    const grid = document.createElement('div');
+    grid.className = 'mandala';
+    container.appendChild(grid);
+    const node = state.data.nodes[nodeId];
+    const cells = [0,1,2,3,'center',4,5,6,7];
+    const categoryClass = (typeof chapterIdx === 'number') ? (chapterIdx <= 3 ? ' cat-outcome' : ' cat-growth') : '';
+    cells.forEach(pos => {
+      const div = document.createElement('div');
+      let klass = 'cell' + categoryClass;
+      if (pos === 'center') klass += ' theme';
+      div.className = klass;
+      if (pos === 'center') {
+        const input = document.createElement('textarea');
+        input.value = node.title || '';
+        input.rows = 1; input.style.height = 'auto';
+        const autoresize = () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 300) + 'px'; };
+        input.oninput = () => { node.title = input.value; autoresize(); save(); };
+        setTimeout(autoresize, 0);
+        div.appendChild(input);
+      } else {
+        const idx = pos;
+        const cell = node.cells[idx];
+        const input = document.createElement('textarea');
+        const textValue = (typeof cell === 'string') ? cell : (cell?.text || '');
+        input.value = textValue;
+        input.rows = 1; input.style.height = 'auto';
+        const autoresize = () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 220) + 'px'; };
+        input.oninput = () => {
+          const current = node.cells[idx];
+          if (typeof current === 'string') {
+            node.cells[idx] = { text: input.value };
+          } else {
+            current.text = input.value;
+          }
+          autoresize(); save();
+        };
+        setTimeout(autoresize, 0);
+        div.appendChild(input);
+      }
+      grid.appendChild(div);
+    });
   }
 
   function navigateBack() {
@@ -328,13 +378,15 @@
     if (toggle81) {
       toggle81.addEventListener('click', () => {
         const wrap = document.getElementById('mandala-app');
-        if (wrap.classList.contains('view-81')) {
+        const willEnable81 = !wrap.classList.contains('view-81');
+        if (willEnable81) {
+          wrap.classList.add('view-81');
+          render81();
+          toggle81.textContent = '9マス表示に戻る';
+        } else {
           wrap.classList.remove('view-81');
           render();
           toggle81.textContent = '81マス表示切替';
-        } else {
-          render81();
-          toggle81.textContent = '9マス表示に戻る';
         }
       });
     }
