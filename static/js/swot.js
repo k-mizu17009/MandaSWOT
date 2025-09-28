@@ -137,6 +137,16 @@
       const sort = document.getElementById('sort-priority')?.value || 'asc';
       const items = (state.swot.priorities || []).map((p, idx) => ({...p, _i: idx}));
       items.forEach(it => { it.sum = (Number(it.impact||0)+Number(it.urgency||0)+Number(it.feasibility||0)); });
+
+      // duplicate detector (per column)
+      const freq = { impact: new Map(), urgency: new Map(), feasibility: new Map() };
+      items.forEach(it => {
+        ['impact','urgency','feasibility'].forEach(k => {
+          const v = Number(it[k] || 0);
+          freq[k].set(v, (freq[k].get(v) || 0) + 1);
+        });
+      });
+      const isDup = (key, val) => (freq[key].get(Number(val)) || 0) > 1;
       if (sort !== 'none') {
         items.sort((a,b) => sort === 'asc' ? a.sum - b.sum : b.sum - a.sum);
       }
@@ -185,6 +195,7 @@
           const clamped = Math.min(Math.max(current, 1), maxVal);
           if (current !== clamped) { state.swot.priorities[p._i][key] = clamped; }
           input.value = String(clamped);
+          if (isDup(key, clamped)) input.classList.add('dup');
           input.oninput = () => {
             const raw = Number(input.value || 0);
             const val = Math.min(Math.max(raw, 1), maxVal);

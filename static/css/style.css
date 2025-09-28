@@ -183,6 +183,7 @@ body {
 .priority-item .title.readonly { border: none; padding: 0; }
 .priority-item .scores { display: flex; gap: 8px; align-items: center; }
 .priority-item .scores input { width: 52px; padding: 6px 8px; background: var(--input-bg); color: var(--input-ink); border: 1px solid var(--input-border); border-radius: 10px; text-align: center; }
+.priority-item .scores input.dup { background: rgba(239, 68, 68, 0.10); border-color: rgba(239, 68, 68, 0.55); }
 .priority-item .sum { font-weight: 700; color: var(--accent); min-width: 40px; text-align: right; }
 .priority-item .comment { min-width: 180px; max-width: 260px; height: 38px; resize: vertical; background: var(--input-bg); color: var(--input-ink); border: 1px solid var(--input-border); border-radius: 10px; padding: 6px 8px; font-size: 13px; }
 .priority-item .del { background: transparent; border: none; color: #888; cursor: pointer; }
