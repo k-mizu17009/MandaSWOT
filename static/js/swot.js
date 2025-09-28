@@ -134,7 +134,7 @@
     // Priorities render
     const listEl = document.getElementById('priority-list');
     if (listEl) {
-      const sort = document.getElementById('sort-priority')?.value || 'none';
+      const sort = document.getElementById('sort-priority')?.value || 'asc';
       const items = (state.swot.priorities || []).map((p, idx) => ({...p, _i: idx}));
       items.forEach(it => { it.sum = (Number(it.impact||0)+Number(it.urgency||0)+Number(it.feasibility||0)); });
       if (sort !== 'none') {

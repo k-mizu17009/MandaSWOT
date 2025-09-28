@@ -74,12 +74,13 @@
         <button id="sync-priority" class="add-card" style="background:linear-gradient(135deg, var(--accent-2), var(--accent));">クロスSWOT記入欄から取り込み</button>
         <label>並び替え:
           <select id="sort-priority">
-            <option value="none" selected>指定しない</option>
+            <option value="none">指定しない</option>
             <option value="desc">合計スコアの高い順</option>
-            <option value="asc">合計スコアの低い順</option>
+            <option value="asc" selected>合計スコアの低い順（推奨）</option>
           </select>
         </label>
       </div>
+      <p class="priority-note">注釈: この表では、数値が低いほど <strong>重要性</strong>・<strong>緊急性</strong>・<strong>解決可能性</strong> が高いと解釈します。<br/>優先順位は <strong>合計点の低い順</strong> を推奨します。</p>
       <div id="priority-list" class="priority-list"></div>
     </div>
 

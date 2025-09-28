@@ -177,6 +177,7 @@ body {
 .prioritize-controls { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
 .prioritize-controls select { background: var(--input-bg); color: var(--input-ink); border: 1px solid var(--input-border); border-radius: 10px; padding: 6px 8px; }
 .priority-list { display: flex; flex-direction: column; gap: 12px; }
+.priority-note { margin: 8px 0 4px; color: var(--muted); font-size: 14px; }
 .priority-item { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; box-shadow: var(--shadow); display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
 .priority-item .title { width: 100%; background: var(--input-bg); color: var(--input-ink); border: 1px solid var(--input-border); border-radius: 10px; padding: 8px; font-size: 14px; }
 .priority-item .title.readonly { border: none; padding: 0; }
