@@ -153,7 +153,7 @@
       headerRight.appendChild(mkLabel('重要性'));
       headerRight.appendChild(mkLabel('緊急性'));
       headerRight.appendChild(mkLabel('解決可能性'));
-      const sumLbl = document.createElement('div'); sumLbl.className = 'sum'; sumLbl.textContent = '合計点(優先順位)'; headerRight.appendChild(sumLbl);
+      const sumLbl = document.createElement('div'); sumLbl.className = 'sum'; sumLbl.textContent = '合計点'; headerRight.appendChild(sumLbl);
       header.appendChild(headerLeft); header.appendChild(headerRight);
       listEl.appendChild(header);
       items.forEach((p) => {
@@ -198,7 +198,7 @@
         right.appendChild(makeNum('重要性', 'impact'));
         right.appendChild(makeNum('緊急性', 'urgency'));
         right.appendChild(makeNum('解決可能性', 'feasibility'));
-        const sum = document.createElement('div'); sum.className = 'sum'; sum.textContent = String(p.sum || 0); sum.title = '合計点(優先順位)'; right.appendChild(sum);
+        const sum = document.createElement('div'); sum.className = 'sum'; sum.textContent = String(p.sum || 0); sum.title = '合計点'; right.appendChild(sum);
         const comment = document.createElement('textarea');
         comment.className = 'comment';
         comment.placeholder = '備考';
